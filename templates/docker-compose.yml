@@ -1,0 +1,30 @@
+version: '3'
+services:
+  data_vault_${TOKEN}:
+    image: humancolossus/oca-data-vault:version-0.1.2
+    container_name: data-vault-${TOKEN}
+    command: /bin/bash -c "bundle exec rackup -o 0.0.0.0 -p 80"
+    volumes:
+      - ${SANDBOX_DIR}/${TOKEN}/data_vault/storage:/usr/src/app/storage
+    networks:
+      - von_von
+
+  mongodb_${TOKEN}:
+    image: mongo:latest
+    container_name: data-vault-mongodb-${TOKEN}
+    volumes:
+      - mongodb_data_${TOKEN}:/data/db
+    networks:
+      - von_von
+
+volumes:
+  mongodb_data_${TOKEN}:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${SANDBOX_DIR}/${TOKEN}/data_vault/mongodb_data
+      o: bind
+
+networks:
+  von_von:
+    external: true
