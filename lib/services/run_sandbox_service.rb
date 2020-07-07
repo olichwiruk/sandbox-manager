@@ -9,7 +9,8 @@ module Services
         variables: {
           token: token,
           sandbox_dir: "#{ROOT_PATH}/sandbox",
-          templates_dir: "#{ROOT_PATH}/templates"
+          templates_dir: "#{ROOT_PATH}/templates",
+          nginx_dir: "#{ROOT_PATH}/../aries/nginx/conf.d"
         }
       )
       result = %x(#{script})
