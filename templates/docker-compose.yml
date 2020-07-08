@@ -29,7 +29,7 @@ services:
     container_name: data-vault-${TOKEN}
     command: /bin/bash -c "bundle exec rackup -o 0.0.0.0 -p 80"
     volumes:
-      - ${SANDBOX_DIR}/${TOKEN}/data_vault/storage:/usr/src/app/storage
+      - ${SANDBOX_PATH}/${TOKEN}/data_vault/storage:/usr/src/app/storage
     networks:
       - von_von
 
@@ -46,7 +46,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${SANDBOX_DIR}/${TOKEN}/data_vault/mongodb_data
+      device: ${SANDBOX_PATH}/${TOKEN}/data_vault/mongodb_data
       o: bind
 
 networks:

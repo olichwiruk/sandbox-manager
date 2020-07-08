@@ -8,13 +8,13 @@ module Services
         path: File.join(LIB_PATH, 'scripts', 'run_sandbox.sh'),
         variables: {
           token: token,
+          sandbox_path: "#{SANDBOX_PATH}",
           sandbox_dir: "#{ROOT_PATH}/sandbox",
           templates_dir: "#{ROOT_PATH}/templates",
-          nginx_dir: "#{ROOT_PATH}/../aries/nginx/conf.d"
+          nginx_dir: "#{ROOT_PATH}/nginx_conf"
         }
       )
       result = %x(#{script})
-      puts result.split('\n')
 
       {
         success: true,
