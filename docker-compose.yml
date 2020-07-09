@@ -12,6 +12,16 @@ services:
     networks:
       - von_von
 
+  redis:
+    image: redis:alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    volumes:
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - von_von
+
 networks:
   von_von:
     external: true
