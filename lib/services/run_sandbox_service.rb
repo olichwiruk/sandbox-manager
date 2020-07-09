@@ -2,7 +2,16 @@
 
 module Services
   class RunSandboxService
-    def call
+    attr_reader :redis
+
+    def initialize(redis)
+      @redis = redis
+    end
+
+    def call(params)
+      valid_params = validate(params)
+      return { success: false, errors: ['invalid params'] } unless valid_params
+
       token = generate_token
       script = load_script(
         path: File.join(LIB_PATH, 'scripts', 'run_sandbox.sh'),
@@ -34,6 +43,13 @@ module Services
         script.gsub!("%{#{k.upcase}}", v)
       end
       script
+    end
+
+    private def validate(params)
+      return unless params['email']
+      {
+        email: params['email']
+      }
     end
   end
 end
