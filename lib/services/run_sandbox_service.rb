@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'domain/script'
+
 module Services
   class RunSandboxService
     attr_reader :redis
@@ -13,7 +15,7 @@ module Services
       return { success: false, errors: ['invalid params'] } unless valid_params
 
       token = generate_token
-      script = load_script(
+      script = Script.load(
         path: File.join(LIB_PATH, 'scripts', 'run_sandbox.sh'),
         variables: {
           token: token,
@@ -23,8 +25,7 @@ module Services
           nginx_dir: "#{ROOT_PATH}/nginx_conf"
         }
       )
-      result = %x(#{script})
-
+      script.run
       {
         success: true,
         data: {
@@ -35,14 +36,6 @@ module Services
 
     private def generate_token
       rand(36**6).to_s(36)
-    end
-
-    private def load_script(path:, variables:)
-      script = File.read(path)
-      variables.each do |k, v|
-        script.gsub!("%{#{k.upcase}}", v)
-      end
-      script
     end
 
     private def validate(params)
