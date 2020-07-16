@@ -14,6 +14,7 @@ module Services
       valid_params = validate(params)
       return { success: false, errors: ['invalid params'] } unless valid_params
 
+      email = valid_params.fetch(:email)
       token = generate_token
       script = Script.load(
         path: File.join(LIB_PATH, 'scripts', 'run_sandbox.sh'),
@@ -25,13 +26,20 @@ module Services
           nginx_dir: "#{ROOT_PATH}/nginx_conf"
         }
       )
-      script.run
-      {
-        success: true,
-        data: {
-          token: token
-        }
-      }
+      run_successfully = script.run
+
+      if run_successfully
+        redis.multi do
+          redis.set("#{email}:token", token)
+          redis.set("#{email}:created_at", Time.now)
+          redis.set("#{email}:lifetime", 24*3600)
+          redis.set("#{email}:active", true)
+        end
+
+        { success: true, data: { token: token } }
+      else
+        { success: false, errors: ['script failed'] }
+      end
     end
 
     private def generate_token
