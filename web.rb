@@ -15,6 +15,13 @@ class Web < Roda
             service.call(r.params)
           end
         end
+
+        r.on 'stop-overdue' do
+          r.get do
+            service = ::Services::StopOverdueSandboxesService.new(redis)
+            service.call
+          end
+        end
       end
     end
   end
