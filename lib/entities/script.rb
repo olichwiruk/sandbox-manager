@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Domain
+module Entities
   class Script
     attr_reader :content
     private :content
