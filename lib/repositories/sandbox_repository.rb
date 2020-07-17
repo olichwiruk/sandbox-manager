@@ -38,7 +38,7 @@ module Repositories
 
     def overdue
       all.select do |sandbox|
-        sandbox.active && !sandbox.overdue?
+        sandbox.active && sandbox.overdue?
       end
     end
   end
