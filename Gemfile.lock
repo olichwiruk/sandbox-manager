@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rack (2.1.1)
+    redis (4.2.1)
+    roda (3.28.0)
+      rack
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  redis (~> 4.2)
+  roda (~> 3.22)
+
+BUNDLED WITH
+   2.1.4

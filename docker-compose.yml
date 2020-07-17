@@ -1,0 +1,28 @@
+version: '3'
+services:
+  tda_init:
+    build: .
+    command: /bin/bash -c "bundle exec rackup -o 0.0.0.0 -p 80"
+    environment:
+      - SANDBOX_PATH=$SANDBOX_PATH
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $SANDBOX_PATH:/usr/src/app/sandbox
+      - /nginx/conf.d:/usr/src/app/nginx_conf
+    networks:
+      - von_von
+
+  redis:
+    image: redis:alpine
+    container_name: tda-init-redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    volumes:
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - von_von
+
+networks:
+  von_von:
+    external: true

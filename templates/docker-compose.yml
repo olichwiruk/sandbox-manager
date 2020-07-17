@@ -1,0 +1,54 @@
+version: '3'
+services:
+  agent1_${TOKEN}:
+    image: humancolossus/agent:version-0.4.5-ext-1
+    container_name: ${TOKEN}.agent1.localhost
+    command: /bin/bash -c "./startup.sh"
+    environment:
+      AGENT_NAME: Main[${TOKEN}]
+      ACAPY_ENDPOINT: http://${TOKEN}.agent1.localhost
+      SWAGGER_INBOUND_PORT: 8150
+      GENESIS_URL: http://webserver:8000/genesis
+    networks:
+      - von_von
+
+  agent2_${TOKEN}:
+    image: humancolossus/agent:version-0.4.5-ext-1
+    container_name: ${TOKEN}.agent2.localhost
+    command: /bin/bash -c "./startup.sh"
+    environment:
+      AGENT_NAME: Client[${TOKEN}]
+      ACAPY_ENDPOINT: http://${TOKEN}.agent2.localhost
+      SWAGGER_INBOUND_PORT: 8150
+      GENESIS_URL: http://webserver:8000/genesis
+    networks:
+      - von_von
+
+  data_vault_${TOKEN}:
+    image: humancolossus/oca-data-vault:version-0.1.2
+    container_name: data-vault-${TOKEN}
+    command: /bin/bash -c "bundle exec rackup -o 0.0.0.0 -p 80"
+    volumes:
+      - ${SANDBOX_PATH}/${TOKEN}/data_vault/storage:/usr/src/app/storage
+    networks:
+      - von_von
+
+  mongodb_${TOKEN}:
+    image: mongo:latest
+    container_name: data-vault-mongodb-${TOKEN}
+    volumes:
+      - mongodb_data_${TOKEN}:/data/db
+    networks:
+      - von_von
+
+volumes:
+  mongodb_data_${TOKEN}:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${SANDBOX_PATH}/${TOKEN}/data_vault/mongodb_data
+      o: bind
+
+networks:
+  von_von:
+    external: true
