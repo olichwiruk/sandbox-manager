@@ -21,11 +21,15 @@ module Repositories
     end
 
     def find_by_email(email)
-      Entities::Sandbox.new(email: email,
-                  instance_uuid: redis.get("#{email}:instance_uuid"),
-                  created_at: redis.get("#{email}:created_at"),
-                  lifetime: redis.get("#{email}:lifetime"),
-                  active: redis.get("#{email}:active"))
+      uuid = redis.get("#{email}:instance_uuid")
+      if uuid
+        Entities::Sandbox.new(email: email, instance_uuid: uuid,
+                    created_at: redis.get("#{email}:created_at"),
+                    lifetime: redis.get("#{email}:lifetime"),
+                    active: redis.get("#{email}:active"))
+      else
+        nil
+      end
     end
 
     def all

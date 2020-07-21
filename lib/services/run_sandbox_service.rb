@@ -12,6 +12,10 @@ module Services
       valid_params = validate(params)
       return { success: false, errors: ['invalid params'] } unless valid_params
       email = valid_params.fetch(:email)
+      if has_active_sandbox(email)
+        sandbox = sandbox_repo.find_by_email(email)
+        return { success: true, data: sandbox.to_h }
+      end
       sandbox = Entities::Sandbox.create(email: email)
 
       script = Entities::Script.load(
@@ -32,6 +36,11 @@ module Services
       else
         { success: false, errors: ['script failed'] }
       end
+    end
+
+    private def has_active_sandbox(email)
+      sandbox = sandbox_repo.find_by_email(email)
+      sandbox ? sandbox.active : false
     end
 
     private def validate(params)
