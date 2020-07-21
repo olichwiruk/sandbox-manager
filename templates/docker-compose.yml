@@ -25,9 +25,11 @@ services:
       - von_von
 
   data_vault_${TOKEN}:
-    image: humancolossus/oca-data-vault:version-0.1.2
+    image: humancolossus/oca-data-vault:version-0.1.3
     container_name: data-vault-${TOKEN}
     command: /bin/bash -c "bundle exec rackup -o 0.0.0.0 -p 80"
+    environment:
+      - MONGODB_URI=data-vault-mongodb-${TOKEN}:27017
     volumes:
       - ${SANDBOX_PATH}/${TOKEN}/data_vault/storage:/usr/src/app/storage
     networks:
