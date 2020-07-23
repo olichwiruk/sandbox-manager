@@ -2,10 +2,11 @@
 
 module Services
   class RunSandboxService
-    attr_reader :sandbox_repo
+    attr_reader :sandbox_repo, :mailer
 
-    def initialize(sandbox_repo)
+    def initialize(sandbox_repo, mailer)
       @sandbox_repo = sandbox_repo
+      @mailer = mailer
     end
 
     def call(params)
@@ -32,6 +33,7 @@ module Services
 
       if run_successfully
         sandbox_repo.save(sandbox)
+        mailer.send(:sandbox_started, sandbox: sandbox)
         { success: true, data: sandbox.to_h }
       else
         { success: false, errors: ['script failed'] }

@@ -1,7 +1,7 @@
 version: '3'
 services:
   agent1_${TOKEN}:
-    image: humancolossus/agent:version-0.4.5-ext-1
+    image: humancolossus/agent:version-0.5.1-ext
     container_name: ${TOKEN}.agent1.localhost
     command: /bin/bash -c "./startup.sh"
     environment:
@@ -13,7 +13,7 @@ services:
       - von_von
 
   agent2_${TOKEN}:
-    image: humancolossus/agent:version-0.4.5-ext-1
+    image: humancolossus/agent:version-0.5.1-ext
     container_name: ${TOKEN}.agent2.localhost
     command: /bin/bash -c "./startup.sh"
     environment:
