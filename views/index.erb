@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://argo.colossi.network/stylesheets/styles.css">
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding-top: 50px;
+      }
+
+      .block {
+        width: 100%;
+      }
+
+      .formContainer, #result {
+        font-size: 20px;
+        padding: 20px 0;
+      }
+
+      #submit {
+        padding: 5px;
+       }
+
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 8px solid darkkhaki;
+        width: 80px;
+        height: 80px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="logo-container">
+      <img src="https://argo.colossi.network/images/logo-light-no-bg.svg"/>
+    </div>
+    <div id="title">
+      <h1>The Human Colossus Foundation</h1>
+    </div>
+    <div id="form">
+      <form onsubmit="submitForm(); return false;">
+        <div class="formContainer">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <button type="submit" class="block" id="submit">Run sandbox</button>
+      </form>
+    </div>
+
+    <div id="result"></div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const el = {
+        form: document.querySelector('#form'),
+        result: document.querySelector('#result'),
+        email: document.querySelector('#email'),
+        submit: document.querySelector('#submit')
+      }
+
+      const submitForm = function() {
+        disableForm()
+        runSandbox({ email: el.email.value })
+      }
+
+      const runSandbox = (config) => {
+        el.result.innerHTML = '<div class="loader"></div>'
+        axios.post('/api/v1/run', { "email": config.email }).then(r => {
+          printResult(r.data)
+        })
+      }
+      const printResult = ({ success, data, errors }) => {
+        if(success) {
+          const toolboxLink = "https://toolbox.argo.colossi.network"
+          const activeUntilDate = new Date(Date.parse(data.created_at) + data.lifetime*1000)
+
+          el.result.innerHTML = `
+            <ul>
+              <li><a target="_blank" href="${toolboxLink}?agent=agent1&uuid=${data.instance_uuid}">Wallet of agent 1</a></li>
+              <li><a target="_blank" href="${toolboxLink}?agent=agent2&uuid=${data.instance_uuid}">Wallet of agent 2</a></li>
+              <li><a target="_blank" href="https://editor.oca.argo.colossi.network">OCA Editor</a></li>
+            </ul>
+
+            Active until ${activeUntilDate.toLocaleDateString('en-EN')}
+            ${activeUntilDate.toLocaleTimeString('en-EN')}
+          `
+        } else {
+          el.result.innerHTML = `
+            <div>ERROR!</div>
+            <div>${ errors.join(', ') }</div>
+          `
+        }
+      }
+
+      const disableForm = () => {
+        el.email.disabled = true
+        el.submit.disabled = true
+      }
+    </script>
+  </body>
+</html>

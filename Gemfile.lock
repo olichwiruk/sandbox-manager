@@ -8,6 +8,7 @@ GEM
     redis (4.2.1)
     roda (3.28.0)
       rack
+    tilt (2.0.10)
 
 PLATFORMS
   ruby
@@ -16,6 +17,7 @@ DEPENDENCIES
   mail (~> 2.7)
   redis (~> 4.2)
   roda (~> 3.22)
+  tilt (~> 2.0)
 
 BUNDLED WITH
    2.1.4

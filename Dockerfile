@@ -15,5 +15,6 @@ COPY Gemfile Gemfile.lock ./
 RUN gem install bundler && bundle install
 
 COPY lib/ ./lib
+COPY views/ ./views
 COPY templates/ ./templates
 COPY config.ru web.rb README.md ./
