@@ -22,6 +22,7 @@ class Mailer
 
       toolbox_link = 'https://tda.argo.colossi.network'
       mail.body = <<~html
+        <a href="https://github.com/THCLab/sandbox-docs/blob/master/BOOTSTRAPPING_SANDBOX.md">Bootstrapping instruction</a><br>
         <a href="#{toolbox_link}?agent=agent1&uuid=#{sandbox.instance_uuid}">Wallet of agent 1</a><br>
         <a href="#{toolbox_link}?agent=agent2&uuid=#{sandbox.instance_uuid}">Wallet of agent 2</a><br>
         <a href="#{toolbox_link}?agent=agent3&uuid=#{sandbox.instance_uuid}">Wallet of agent 3</a><br>
