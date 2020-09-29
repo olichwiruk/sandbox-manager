@@ -85,7 +85,7 @@
       }
       const printResult = ({ success, data, errors }) => {
         if(success) {
-          const toolboxLink = "https://toolbox.argo.colossi.network"
+          const toolboxLink = "https://tda.argo.colossi.network"
           const activeUntilDate = new Date(Date.parse(data.created_at) + data.lifetime*1000)
 
           el.result.innerHTML = `

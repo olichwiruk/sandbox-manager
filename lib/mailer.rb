@@ -19,9 +19,12 @@ class Mailer
       sandbox = args[:sandbox]
       mail.to = sandbox.email
       mail.subject = 'Argo Sandbox'
+
+      toolbox_link = 'https://tda.argo.colossi.network'
       mail.body = <<~html
-        <a href="https://toolbox.argo.colossi.network?agent=agent1&uuid=#{sandbox.instance_uuid}">Wallet of agent 1</a><br>
-        <a href="https://toolbox.argo.colossi.network?agent=agent2&uuid=#{sandbox.instance_uuid}">Wallet of agent 2</a><br>
+        <a href="#{toolbox_link}?agent=agent1&uuid=#{sandbox.instance_uuid}">Wallet of agent 1</a><br>
+        <a href="#{toolbox_link}?agent=agent2&uuid=#{sandbox.instance_uuid}">Wallet of agent 2</a><br>
+        <a href="#{toolbox_link}?agent=agent3&uuid=#{sandbox.instance_uuid}">Wallet of agent 3</a><br>
         <a href="https://editor.oca.argo.colossi.network">OCA Editor</a>
 
         <br><br>
